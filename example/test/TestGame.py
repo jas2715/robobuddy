@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import pygame
-from gi.repository import Gtk
+#from gi.repository import Gtk
 
 
 class TestGame:
@@ -36,8 +36,8 @@ class TestGame:
 
         while self.running:
             # Pump GTK messages.
-            while Gtk.events_pending():
-                Gtk.main_iteration()
+            #while Gtk.events_pending():
+            #    Gtk.main_iteration()
 
             # Pump PyGame messages.
             for event in pygame.event.get():
@@ -67,10 +67,10 @@ class TestGame:
                 self.vy += 5
 
             # Clear Display
-            screen.fill((255, 255, 255))  # 255 for white
+            screen.fill((255, 255, 0))  # 255 for white
 
             # Draw the ball
-            pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), 100)
+            pygame.draw.circle(screen, (0, 255, 0), (self.x, self.y), 100)
 
             # Flip Display
             pygame.display.flip()
