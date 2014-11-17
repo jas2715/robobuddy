@@ -2,17 +2,40 @@
 import pygame
 #from gi.repository import Gtk
 
+class Ball:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.vx = 10
+        self.vy = -10
+
+    def move(self,screen):
+        self.x += self.vx
+        self.y += self.vy
+
+        while self.x > screen.get_width():
+            self.x -= 1
+            if (self.vx > 0): self.vx *= -1
+
+        while self.x < 0:
+            self.x += 1
+            if (self.vx < 0): self.vx *= -1
+
+        while self.y > screen.get_height():
+            self.y -= 1
+            if (self.vy > 0): self.vy *= -1
+
+        while self.y < 0:
+            self.y += 1
+            if (self.vy < 0): self.vy *= -1
+
+    def switchDirection(self):
+        self.vx *= -1
 
 class TestGame:
     def __init__(self):
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
-
-        self.x = -100
-        self.y = 100
-
-        self.vx = 10
-        self.vy = 0
 
         self.paused = False
         self.direction = 1
@@ -31,7 +54,7 @@ class TestGame:
     # The main game loop.
     def run(self):
         self.running = True
-
+        ball = Ball()
         screen = pygame.display.get_surface()
 
         while self.running:
@@ -45,32 +68,17 @@ class TestGame:
                     return
                 elif event.type == pygame.VIDEORESIZE:
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        self.direction = -1
-                    elif event.key == pygame.K_RIGHT:
-                        self.direction = 1
+                elif event.type == pygame.MOUSEBUTTONDOWN :
+                    ball.switchDirection()
 
             # Move the ball
-            if not self.paused:
-                self.x += self.vx * self.direction
-                if self.direction == 1 and self.x > screen.get_width() + 100:
-                    self.x = -100
-                elif self.direction == -1 and self.x < -100:
-                    self.x = screen.get_width() + 100
-
-                self.y += self.vy
-                if self.y > screen.get_height() - 100:
-                    self.y = screen.get_height() - 100
-                    self.vy = -self.vy
-
-                self.vy += 5
+            ball.move(screen)
 
             # Clear Display
             screen.fill((255, 255, 0))  # 255 for white
 
             # Draw the ball
-            pygame.draw.circle(screen, (0, 255, 0), (self.x, self.y), 100)
+            pygame.draw.circle(screen, (0, 255, 0), (ball.x, ball.y), 100)
 
             # Flip Display
             pygame.display.flip()
