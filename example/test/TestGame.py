@@ -1,5 +1,8 @@
 #!/usr/bin/python
 import pygame
+import TextureLoader
+import DrawHelper
+import os
 #from gi.repository import Gtk
 
 
@@ -7,13 +10,30 @@ class TestGame:
     def __init__(self):
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
+		
+        # Set the screen
+        #width = pygame.display.Info().current_w
+        #height = pygame.display.Info().current_h
+        #if(float(width)/float(height) == float(4)/float(3)):
+        #    screenSize = (width,height)
+        #else:
+		#	screenSize = (800,600)
+        #self.screen = pygame.display.set_mode(screenSize, pygame.FULLSCREEN)
+		
+        self.screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+        self.screenSize = (800,600)
+        TextureLoader.screenSize = self.screenSize
 
         self.x = -100
         self.y = 100
 
         self.vx = 10
         self.vy = 0
-
+        
+		# Do a test draw
+        self.robotImage = TextureLoader.load(os.path.join('assets', 'bot-sketch.png'), (89,106))
+        #DrawHelper.drawAspect(self.screen,self.robotImage, 0,0)
+        
         self.paused = False
         self.direction = 1
 
@@ -71,6 +91,9 @@ class TestGame:
 
             # Draw the ball
             pygame.draw.circle(screen, (0, 255, 0), (self.x, self.y), 100)
+			
+			# Draw an image 
+            DrawHelper.drawAspect(screen,self.robotImage, 0,0)
 
             # Flip Display
             pygame.display.flip()
@@ -83,7 +106,7 @@ class TestGame:
 # ./TestGame.py
 def main():
     pygame.init()
-    pygame.display.set_mode((0, 0), pygame.RESIZABLE)
+    #pygame.display.set_mode((0, 0), pygame.RESIZABLE)
     game = TestGame()
     game.run()
 
