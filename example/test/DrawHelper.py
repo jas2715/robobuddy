@@ -13,5 +13,6 @@ def drawAspect(screen,textureId, x,y): #drawing in terms of aspect
 	#screen.blit(TextureLoader.get( textureId), pygame.Rect(50,50,10,10) ); 
 	#pygame.draw.rect(screen,(255,0,0),(200,150,100,50))
 	pass
-def drawCoor(screen,textureId, x,y,w,h): #drawing i nterms of raw coordinates
+def drawCoor(screen,textureId, x,y): #drawing i nterms of raw coordinates
+        screen.blit(TextureLoader.get(textureId), (x, y))
 	pass

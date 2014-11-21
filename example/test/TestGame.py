@@ -59,9 +59,18 @@ class TestGame:
                     return
                 elif event.type == pygame.VIDEORESIZE:
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
+                elif event.type == pygame.MOUSEBUTTONDOWN :
+                    self.gs.testMouse()
+                elif event.type == pygame.MOUSEBUTTONUP :
+                    self.gs.selectedTile = None
+                elif event.type == pygame.MOUSEMOTION :
+                    self.gs.mouseX,self.gs.mouseY = pygame.mouse.get_pos()
 
             # Clear Display
             screen.fill((255, 255, 0))  # 255 for white
+
+            # Game loop
+            self.gs.update()
 			
 	    # Draw game screen and its elements
             self.gs.draw(self.screen)
