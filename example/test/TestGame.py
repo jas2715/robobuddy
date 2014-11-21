@@ -24,9 +24,10 @@ class TestGame:
         #self.screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
         TextureLoader.screenSize = self.screenSize
         
-	# Init drawing
+	# Init values
 	DrawHelper.init(self.screenSize[0], self.screenSize[1])
         self.gs = GameScreen()
+        self.font =  pygame.font.SysFont('ActionIsShaded', 12)
 		
         self.paused = False
 
@@ -62,8 +63,7 @@ class TestGame:
             # Clear Display
             screen.fill((255, 255, 0))  # 255 for white
 			
-			# Draw an image 
-            #DrawHelper.drawAspect(screen,self.robotImage, 0,0)
+	    # Draw game screen and its elements
             self.gs.draw(self.screen)
 
             # Flip Display
