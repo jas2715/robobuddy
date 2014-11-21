@@ -17,10 +17,10 @@ class TestGame:
         if(float(width)/float(height) == float(4)/float(3)):
             self.screenSize = (width,height)
         else:
-			self.screenSize = (800,600)
+		self.screenSize = (800,600)
         self.screen = pygame.display.set_mode(self.screenSize, pygame.FULLSCREEN)
 		
-		# Windowed mode
+	# Windowed mode
         #self.screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
         TextureLoader.screenSize = self.screenSize
 
@@ -30,9 +30,8 @@ class TestGame:
         self.vx = 10
         self.vy = 0
         
-		# Do a test draw
-        #self.robotImage = TextureLoader.load(os.path.join('assets', 'bot-sketch.png'), (89,106))
-        #DrawHelper.drawAspect(self.screen,self.robotImage, 0,0)
+	# Init drawing
+	DrawHelper.init(self.screenSize[0], self.screenSize[1])
         self.gs = GameScreen()
 		
         self.paused = False
