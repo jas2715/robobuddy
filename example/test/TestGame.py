@@ -60,8 +60,9 @@ class TestGame:
                 elif event.type == pygame.VIDEORESIZE:
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
                 elif event.type == pygame.MOUSEBUTTONDOWN :
-                    self.gs.testMouse()
+                    self.gs.pressMouse()
                 elif event.type == pygame.MOUSEBUTTONUP :
+                    self.gs.releaseMouse()
                     self.gs.selectedTile = None
                 elif event.type == pygame.MOUSEMOTION :
                     self.gs.mouseX,self.gs.mouseY = pygame.mouse.get_pos()
