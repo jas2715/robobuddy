@@ -16,6 +16,12 @@ class GameScreen:
         self.botImage = TextureLoader.load(os.path.join('assets', 'bot.png'), (37,49))
         self.mainImage = TextureLoader.load(os.path.join('assets', 'main.png'), (151,151))
         self.funcImage = TextureLoader.load(os.path.join('assets', 'func.png'), (151,101))
+        self.goButton = TextureLoader.load(os.path.join('assets', 'button-go.png'), (69,27))
+        self.clearButton = TextureLoader.load(os.path.join('assets', 'button-clear.png'), (69,27))
+
+        self.botRunning = False
+        self.currentCommand = 0
+        self.commands = []
 
         # Load tile images
         for i in range(0, 5):
@@ -23,18 +29,12 @@ class GameScreen:
         # constant for keeping track of tile width and spawner placement
         self.TILEWIDTH = 47;
 
-        #self.tileImage1 = TextureLoader.load(os.path.join('assets', 'tile1.png'), (47,47))
-        #self.tileImage2 = TextureLoader.load(os.path.join('assets', 'tile2.png'), (47,47))
-        #self.tileImage3 = TextureLoader.load(os.path.join('assets', 'tile3.png'), (47,47))
-        #self.tileImage4 = TextureLoader.load(os.path.join('assets', 'tile4.png'), (47,47))
-        #self.tileImage5 = TextureLoader.load(os.path.join('assets', 'tile5.png'), (47,47))
-
         # The selected tile is the one being dragged
         self.selectedTile = None
 
         # The two grids - represented by 2d arrays 
         self.mainMethod = [[0 for x in range(3)] for x in range(3)] 
-        self.secondaryMethod = [[0 for x in range(2)] for x in range(3)] 
+        self.secondaryMethod = [[0 for x in range(2)] for x in range(3)]
 
         # Two sizes of the same font to use
         self.titleFont =  pygame.font.SysFont('ActionIsShaded', 48)
@@ -44,6 +44,13 @@ class GameScreen:
     def update(self):
         if self.selectedTile:
             self.selectedTile.move(self.mouseX,self.mouseY,self.TILEWIDTH);
+
+        # Move Robobuddy
+        if self.botRunning:
+            cmd = self.commands[self.currentCommand]
+
+            # Hm......
+                
 
     # Clicked on a tile or one of the spawners? Either spawn a new one or move the current selected one
     def pressMouse(self):
@@ -66,6 +73,45 @@ class GameScreen:
                     tiles.append(self.selectedTile)
                     return
                 tempX += 50
+
+            # Is the user clicking on the Clear button?
+            tempX = 599
+            tempY = 420
+            if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
+                # Clear tiles and grids
+                global tiles
+                tiles = []
+                for i in range(0, 3):
+                    for j in range(0, 3):
+                        self.removeFromGrid(i,j,"main")
+                for i in range(0, 3):
+                    for j in range(0, 2):
+                        self.removeFromGrid(i,j,"secondary")
+                return
+
+            # Is the user clicking on the Go button?
+            tempX = 682
+            if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
+
+                if not self.botRunning:
+                    # Start the run process
+                    self.botRunning = True
+
+                    # Build list of commands
+                    self.commands = []
+                    #for row in self.mainMethod:
+                    #    for col in self.mainMethod[row]:
+                            # Grab the commands that exist from the grid
+                     #       if self.mainMethod[row][col] != 0:
+                     #           self.commands.append(self.mainMethod[row][col])
+
+                    for cell in self.mainMethod:
+                        if cell != 0:
+                            self.commands.append(cell)
+
+                    # TODO: include the "F" in here somehow
+                return
+            
 
     # The mouse button was released and a tile is selected. kill whatever isn't in an appropriate location
     def releaseMouse(self):
@@ -142,15 +188,13 @@ class GameScreen:
             eqPos.centery = 50
             screen.blit(labelEq, eqPos)
 
+            # Buttons
+            DrawHelper.drawCoor(screen,self.goButton,682, 420)
+            DrawHelper.drawCoor(screen,self.clearButton,599, 420)
+
             # Draw the tile spawners (just images) with a 3 pixel gap
             for i in range(0, 5):
                 DrawHelper.drawCoor(screen,tileImages[i],(550 + i*(self.TILEWIDTH+3)),500)
             # Draw any dragged out tiles
             for t in tiles:
                 t.draw(screen)
-            
-            #DrawHelper.drawAspect(screen,self.tileImage1, 0.68,0.7)
-            #DrawHelper.drawAspect(screen,self.tileImage2, 0.74,0.7)
-            #DrawHelper.drawAspect(screen,self.tileImage3, 0.8,0.7)
-            #DrawHelper.drawAspect(screen,self.tileImage4, 0.86,0.7)
-            #DrawHelper.drawAspect(screen,self.tileImage5, 0.92,0.7)
