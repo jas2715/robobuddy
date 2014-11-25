@@ -5,6 +5,7 @@ import MouseMethodHelper
 import math
 import os
 from GameTile import GameTile
+from MovingBot import MovingBot
 
 tileImages = []
 tiles = []
@@ -22,6 +23,8 @@ class GameScreen:
         self.botRunning = False
         self.currentCommand = 0
         self.commands = []
+
+        self.bot = MovingBot(self.botImage, 100, 100)
 
         # Load tile images
         for i in range(0, 5):
@@ -50,6 +53,9 @@ class GameScreen:
             cmd = self.commands[self.currentCommand]
 
             # Hm......
+
+            # ?
+            self.bot.move(1,1)
                 
 
     # Clicked on a tile or one of the spawners? Either spawn a new one or move the current selected one
@@ -162,7 +168,8 @@ class GameScreen:
             DrawHelper.drawAspect(screen,self.bgImage, 0,0)
             DrawHelper.drawAspect(screen,self.mainImage, 0.75,0.2)
             DrawHelper.drawAspect(screen,self.funcImage, 0.75,0.5)
-            DrawHelper.drawAspect(screen,self.botImage, 0.365,0.835)
+            #DrawHelper.drawAspect(screen,self.botImage, 0.365,0.835)
+            self.bot.draw(screen)
 
              # Text blocks
             title1 = self.titleFont.render("Robobuddy", 1, (10,10,10))
