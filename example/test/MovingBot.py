@@ -7,10 +7,36 @@ class MovingBot:
         self.image = image
         self.x = x
         self.y = y
+        # 0 - north, 1 - east, 2 - south, 3 - west
+        self.direction = 0
 
-    def move(self, x, y):
-        self.x += x
-        self.y += y
+    def executeCommand(self,command):
+        options = {
+            'forward' : self.goForward,
+            'turnleft' : self.turnLeft,
+            'turnright' : self.turnRight,
+        }
+        options[command]
 
     def draw(self, screen):
         DrawHelper.drawCoor(screen,self.image,self.x,self.y)
+
+    def goForward(self):
+        if(self.direction == 0):
+            self.y -= 51
+        if(self.direction == 1):
+            self.x += 51
+        if(self.direction == 2):
+            self.y += 51
+        if(self.direction == 3):
+            self.x -= 51
+
+    def turnLeft(self):
+        self.direction -= 1
+        if(self.direction < 0):
+            self.direction = 3
+
+    def turnRight(self):
+        self.direction += 1
+        if(self.direction > 3):
+            self.direction = 0

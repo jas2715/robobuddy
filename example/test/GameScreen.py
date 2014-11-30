@@ -24,7 +24,7 @@ class GameScreen:
         self.currentCommand = 0
         self.commands = []
 
-        self.bot = MovingBot(self.botImage, 100, 100)
+        self.bot = MovingBot(self.botImage, 91, 100)
 
         # Load tile images
         for i in range(0, 5):
@@ -51,14 +51,15 @@ class GameScreen:
         # Move Robobuddy
         if self.botRunning:
             cmd = self.commands[self.currentCommand]
+            print(self.commands)
+            if(cmd == "grab"):
+                #add the current number the robot is standing on to the equation
+            elif(cmd == "function"):
+                #run the commands from the secondary function
+            elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
+                self.bot.executeCommand(cmd)
 
-            # Hm......
-
-            # ?
-            self.bot.move(1,1)
-                
-
-    # Clicked on a tile or one of the spawners? Either spawn a new one or move the current selected one
+    # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):
         # Wont even bother to check for collision unless the player is clicking on the right side of the screen
         # Trades a few extra lines for a little bit of optimization
@@ -103,21 +104,25 @@ class GameScreen:
                     # Start the run process
                     self.botRunning = True
 
-                    # Build list of commands
-                    self.commands = []
-                    #for row in self.mainMethod:
-                    #    for col in self.mainMethod[row]:
-                            # Grab the commands that exist from the grid
-                     #       if self.mainMethod[row][col] != 0:
-                     #           self.commands.append(self.mainMethod[row][col])
+                    #http://stackoverflow.com/questions/24591917/nested-loop-python
 
-                    for cell in self.mainMethod:
-                        if cell != 0:
-                            self.commands.append(cell)
+                    #We need to work a nested for loop in here so we can get the filtered array of commands
+
+                    # Build list of commands
+                    #self.commands = []
+                    #for i in self.mainMethod:
+                    #    for j in self.mainMethod[i]:
+                            # Grab the commands that exist from the grid
+                    #        if self.mainMethod[i][j] != 0:
+                    #            self.commands.append(self.mainMethod[i][j])
+                    
+                    #for cell in self.mainMethod:
+                    #    if cell != 0:
+                    #        self.commands.append(cell)
+                    #FIX COMMANDS TO BE ONLY THE GOOD STUFF
 
                     # TODO: include the "F" in here somehow
                 return
-            
 
     # The mouse button was released and a tile is selected. kill whatever isn't in an appropriate location
     def releaseMouse(self):
