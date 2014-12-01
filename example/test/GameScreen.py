@@ -50,14 +50,16 @@ class GameScreen:
 
         # Move Robobuddy
         if self.botRunning:
-            cmd = self.commands[self.currentCommand]
-            print(self.commands)
-            if(cmd == "grab"):
-                #add the current number the robot is standing on to the equation
-            elif(cmd == "function"):
-                #run the commands from the secondary function
-            elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
-                self.bot.executeCommand(cmd)
+            if len(self.commands) > self.currentCommand:
+                cmd = self.commands[self.currentCommand]
+                print(self.commands)
+                #if(cmd == "grab"):
+                    #add the current number the robot is standing on to the equation
+                #elif(cmd == "function"):
+                    #run the commands from the secondary function
+                #elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
+                if(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
+                    self.bot.executeCommand(cmd)
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):

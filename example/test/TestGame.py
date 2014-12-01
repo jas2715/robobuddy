@@ -4,6 +4,7 @@ import TextureLoader
 import DrawHelper
 import os
 from GameScreen import GameScreen
+from MenuScreen import MenuScreen
 #from gi.repository import Gtk
 
 class TestGame:
@@ -23,10 +24,14 @@ class TestGame:
 	# Windowed mode
         #self.screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
         TextureLoader.screenSize = self.screenSize
+
+        # 0 = Menu, 1 = Game
+        self.gameState = 0
         
 	# Init values
 	DrawHelper.init(self.screenSize[0], self.screenSize[1])
         self.gs = GameScreen()
+        self.ms = MenuScreen()
         self.font =  pygame.font.SysFont('ActionIsShaded', 12)
 		
         self.paused = False
@@ -60,21 +65,33 @@ class TestGame:
                 elif event.type == pygame.VIDEORESIZE:
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
                 elif event.type == pygame.MOUSEBUTTONDOWN :
-                    self.gs.pressMouse()
+                    if self.gameState == 0:
+                        self.ms.pressMouse()
+                    elif self.gameState == 1:
+                        self.gs.pressMouse()                    
                 elif event.type == pygame.MOUSEBUTTONUP :
                     self.gs.releaseMouse()
                     self.gs.selectedTile = None
                 elif event.type == pygame.MOUSEMOTION :
-                    self.gs.mouseX,self.gs.mouseY = pygame.mouse.get_pos()
+                    if self.gameState == 0:
+                        self.ms.mouseX,self.ms.mouseY = pygame.mouse.get_pos()
+                    elif self.gameState == 1:
+                        self.gs.mouseX,self.gs.mouseY = pygame.mouse.get_pos()
 
             # Clear Display
             screen.fill((255, 255, 0))  # 255 for white
 
-            # Game loop
-            self.gs.update()
-			
-	    # Draw game screen and its elements
-            self.gs.draw(self.screen)
+            # Game or menu?
+            if self.gameState == 0:
+                # Menu draw
+                self.ms.draw(self.screen)
+                if self.ms.clicked:
+                    self.gameState = 1
+                    self.ms.clicked = False
+            elif self.gameState == 1:
+                # Game loop, then draw
+                self.gs.update()
+                self.gs.draw(self.screen)
 
             # Flip Display
             pygame.display.flip()

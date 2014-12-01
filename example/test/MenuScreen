@@ -1,0 +1,59 @@
+import pygame
+import TextureLoader
+import DrawHelper
+import MouseMethodHelper
+import math
+import os
+from GameTile import GameTile
+from MovingBot import MovingBot
+
+tileImages = []
+tiles = []
+
+class GameScreen:
+    # Load all of the textures, fonts, titles, etc.
+    def __init__(self):
+        self.bgImage = TextureLoader.load(os.path.join('assets', 'game-bg.png'), (800,600))
+        self.botImage = TextureLoader.load(os.path.join('assets', 'bot.png'), (37,49))
+        self.mainImage = TextureLoader.load(os.path.join('assets', 'main.png'), (151,151))
+        self.funcImage = TextureLoader.load(os.path.join('assets', 'func.png'), (151,101))
+        self.goButton = TextureLoader.load(os.path.join('assets', 'button-go.png'), (69,27))
+        self.clearButton = TextureLoader.load(os.path.join('assets', 'button-clear.png'), (69,27))
+
+        self.botRunning = False
+        self.currentCommand = 0
+        self.commands = []
+
+        self.bot = MovingBot(self.botImage, 91, 100)
+
+        # Load tile images
+        for i in range(0, 5):
+            tileImages.append(TextureLoader.load(os.path.join('assets', 'tile' + str(i+1) + '.png'), (47,47) ))
+        # constant for keeping track of tile width and spawner placement
+        self.TILEWIDTH = 47;
+
+        # The selected tile is the one being dragged
+        self.selectedTile = None
+
+        # The two grids - represented by 2d arrays 
+        self.mainMethod = [[0 for x in range(3)] for x in range(3)] 
+        self.secondaryMethod = [[0 for x in range(2)] for x in range(3)]
+
+        # Two sizes of the same font to use
+        self.titleFont =  pygame.font.SysFont('ActionIsShaded', 48)
+        self.labelFont = pygame.font.SysFont('ActionIsShaded', 24)
+
+    # Update the game logic
+    def update(self):
+
+         print("hi")
+
+    # Draw all screen elements here!
+    def draw(self, screen):
+    	if screen != 0:
+             # Text blocks
+            title1 = self.titleFont.render("Robobuddy", 1, (10,10,10))
+            title1pos = title1.get_rect()
+            title1pos.centerx = 675
+            title1pos.centery = 50
+            screen.blit(title1, title1pos)
