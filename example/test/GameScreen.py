@@ -163,7 +163,7 @@ class GameScreen:
                 self.logInfoForTesting()
                 return
             # if the mouse is released somewhere inside the secondary function grid (again, hardcoded)
-            if((self.mouseX > 600 and self.mouseX < 600+151) and (self.mouseY > 300 and self.mouseY < 300+101)):
+            if(((self.mouseX > 600 and self.mouseX < 600+151) and (self.mouseY > 300 and self.mouseY < 300+101)) and self.selectedTile.action != "function"):
                 MouseMethodHelper.releaseInSecondaryGrid(self.mouseX,self.mouseY,self.selectedTile,self.secondaryMethod,tiles)
                 self.logInfoForTesting()
                 return
