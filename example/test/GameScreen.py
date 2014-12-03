@@ -22,7 +22,9 @@ class GameScreen:
 
         self.botRunning = False
         self.currentCommand = 0
+        self.currentSecondaryCommand = 0
         self.commands = []
+        self.secondaryCommands = []
 
         self.bot = MovingBot(self.botImage, 91, 100)
 
@@ -50,16 +52,43 @@ class GameScreen:
 
         # Move Robobuddy
         if self.botRunning:
+            #if Robobuddy has not reached the end of his commands
             if len(self.commands) > self.currentCommand:
+                # get the current command 
                 cmd = self.commands[self.currentCommand]
-                print(self.commands)
-                #if(cmd == "grab"):
-                    #add the current number the robot is standing on to the equation
-                #elif(cmd == "function"):
-                    #run the commands from the secondary function
-                #elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
-                if(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
+                # if that command is to grab a number then grab the number Robobuddy is standing on
+                if(cmd == "grab"):
+                    print("Grab")
+                    # increment current command since it's done now
+                    self.currentCommand += 1
+                # if the current command is actually to run the function then we go into a second loop
+                elif(cmd == "function"):
+                    if (len(self.secondaryCommands) > self.currentSecondaryCommand):
+                        #runs step by step through the functions commands
+                        cmd2 = self.secondaryCommands[self.currentSecondaryCommand]
+                        #if the command is to grab a number then grab the number Robobuddy is standing on
+                        if(cmd2 == "grab"):
+                            print("Grab")
+                            # Same as before but now increment currentSECONDARYcommand since were in the function
+                            self.currentSecondaryCommand += 1
+                        #if the command is to turn or move then do so
+                        elif(cmd2 == "turnleft" or cmd2 == "turnright" or cmd2 == "forward"):
+                            self.bot.executeCommand(cmd2)
+                            # Same as before but now increment currentSECONDARYcommand since were in the function
+                            self.currentSecondaryCommand += 1
+                    #if the function is complete, increment the main list of commands, and reset the counter
+                    else:
+                        self.currentCommand += 1
+                        self.currentSecondaryCommand = 0
+                #if the command is to turn or move then do so        
+                elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
                     self.bot.executeCommand(cmd)
+                    self.currentCommand += 1
+            # if robobuddy has reached the end of his commands then stop running and reset current command
+            else:
+                self.currentCommand = 0
+                self.botRunning = False
+
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):
@@ -103,27 +132,26 @@ class GameScreen:
             if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
 
                 if not self.botRunning:
-                    # Start the run process
+                    # Start the run process and "zero" the reobot
+                    self.bot.reset()
                     self.botRunning = True
 
-                    #http://stackoverflow.com/questions/24591917/nested-loop-python
-
-                    #We need to work a nested for loop in here so we can get the filtered array of commands
+                    # Build list of secondary commands
+                    self.secondaryCommands = []
+                    for i in range(0,2):
+                        for j in range(0,3):
+                            # Grab the commands that exist from the grid
+                            if self.secondaryMethod[j][i] != 0:
+                                self.secondaryCommands.append(self.secondaryMethod[j][i])
 
                     # Build list of commands
-                    #self.commands = []
-                    #for i in self.mainMethod:
-                    #    for j in self.mainMethod[i]:
+                    self.commands = []
+                    for k in range(0,3):
+                        for l in range(0,3):
                             # Grab the commands that exist from the grid
-                    #        if self.mainMethod[i][j] != 0:
-                    #            self.commands.append(self.mainMethod[i][j])
-                    
-                    #for cell in self.mainMethod:
-                    #    if cell != 0:
-                    #        self.commands.append(cell)
-                    #FIX COMMANDS TO BE ONLY THE GOOD STUFF
+                            if self.mainMethod[l][k] != 0:
+                                self.commands.append(self.mainMethod[l][k])
 
-                    # TODO: include the "F" in here somehow
                 return
 
     # The mouse button was released and a tile is selected. kill whatever isn't in an appropriate location

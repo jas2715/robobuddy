@@ -19,7 +19,7 @@ class TestGame:
             self.screenSize = (width,height)
         else:
 		self.screenSize = (800,600)
-        self.screen = pygame.display.set_mode(self.screenSize, pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode(self.screenSize, pygame.RESIZABLE)
 		
 	# Windowed mode
         #self.screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
