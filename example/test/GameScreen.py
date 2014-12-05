@@ -2,6 +2,7 @@ import pygame
 import TextureLoader
 import DrawHelper
 import MouseMethodHelper
+import MovementHelper
 import math
 import os
 from GameTile import GameTile
@@ -48,47 +49,9 @@ class GameScreen:
     # Update the game logic
     def update(self):
         if self.selectedTile:
-            self.selectedTile.move(self.mouseX,self.mouseY,self.TILEWIDTH);
-
-        # Move Robobuddy
-        if self.botRunning:
-            #if Robobuddy has not reached the end of his commands
-            if len(self.commands) > self.currentCommand:
-                # get the current command 
-                cmd = self.commands[self.currentCommand]
-                # if that command is to grab a number then grab the number Robobuddy is standing on
-                if(cmd == "grab"):
-                    print("Grab")
-                    # increment current command since it's done now
-                    self.currentCommand += 1
-                # if the current command is actually to run the function then we go into a second loop
-                elif(cmd == "function"):
-                    if (len(self.secondaryCommands) > self.currentSecondaryCommand):
-                        #runs step by step through the functions commands
-                        cmd2 = self.secondaryCommands[self.currentSecondaryCommand]
-                        #if the command is to grab a number then grab the number Robobuddy is standing on
-                        if(cmd2 == "grab"):
-                            print("Grab")
-                            # Same as before but now increment currentSECONDARYcommand since were in the function
-                            self.currentSecondaryCommand += 1
-                        #if the command is to turn or move then do so
-                        elif(cmd2 == "turnleft" or cmd2 == "turnright" or cmd2 == "forward"):
-                            self.bot.executeCommand(cmd2)
-                            # Same as before but now increment currentSECONDARYcommand since were in the function
-                            self.currentSecondaryCommand += 1
-                    #if the function is complete, increment the main list of commands, and reset the counter
-                    else:
-                        self.currentCommand += 1
-                        self.currentSecondaryCommand = 0
-                #if the command is to turn or move then do so        
-                elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
-                    self.bot.executeCommand(cmd)
-                    self.currentCommand += 1
-            # if robobuddy has reached the end of his commands then stop running and reset current command
-            else:
-                self.currentCommand = 0
-                self.botRunning = False
-
+            self.selectedTile.move(self.mouseX,self.mouseY,self.TILEWIDTH)
+        
+        MovementHelper.executeCommands(self)
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):
@@ -116,6 +79,12 @@ class GameScreen:
             tempX = 599
             tempY = 420
             if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
+                # stop and reset the robot and command heirarchy
+                self.bot.reset()
+                self.botRunning = False
+                self.currentCommand = 0
+                self.currentSecondaryCommand = 0
+
                 # Clear tiles and grids
                 global tiles
                 tiles = []
@@ -163,7 +132,7 @@ class GameScreen:
                 self.logInfoForTesting()
                 return
             # if the mouse is released somewhere inside the secondary function grid (again, hardcoded)
-            if(((self.mouseX > 600 and self.mouseX < 600+151) and (self.mouseY > 300 and self.mouseY < 300+101)) and self.selectedTile.action != "function"):
+            if((self.mouseX > 600 and self.mouseX < 600+151) and (self.mouseY > 300 and self.mouseY < 300+101)):
                 MouseMethodHelper.releaseInSecondaryGrid(self.mouseX,self.mouseY,self.selectedTile,self.secondaryMethod,tiles)
                 self.logInfoForTesting()
                 return
