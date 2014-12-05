@@ -27,7 +27,7 @@ class GameScreen:
         self.commands = []
         self.secondaryCommands = []
 
-        self.bot = MovingBot(self.botImage, 91, 100)
+        self.bot = MovingBot(self.botImage, 291, 300)
 
         # Load tile images
         for i in range(0, 5):
@@ -50,7 +50,7 @@ class GameScreen:
     def update(self):
         if self.selectedTile:
             self.selectedTile.move(self.mouseX,self.mouseY,self.TILEWIDTH)
-        
+
         MovementHelper.executeCommands(self)
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods

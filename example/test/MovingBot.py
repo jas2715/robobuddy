@@ -9,8 +9,8 @@ class MovingBot:
         self.y = y
         # 0 - north, 1 - east, 2 - south, 3 - west
         self.direction = 0
-        self.xCoordinate = 0
-        self.yCoordinate = 0
+        self.xCoordinate = 4
+        self.yCoordinate = 4
 
     # executes the passed in commands one by one
     def executeCommand(self,command):
@@ -27,16 +27,16 @@ class MovingBot:
 
     def goForward(self):
         if(self.direction == 0):
-            self.y -= 51
+            self.y -= 50
             self.yCoordinate -= 1
         if(self.direction == 1):
-            self.x += 51
+            self.x += 50
             self.xCoordinate += 1
         if(self.direction == 2):
-            self.y += 51
+            self.y += 50
             self.yCoordinate += 1
         if(self.direction == 3):
-            self.x -= 51
+            self.x -= 50
             self.yCoordinate -= 1
 
     def turnLeft(self):
@@ -51,7 +51,7 @@ class MovingBot:
 
     def reset(self):
         self.direction = 0
-        self.x = 91
-        self.y = 100
-        self.xCoordinate = 0
-        self.yCoordinate = 0
+        self.x = 291
+        self.y = 300
+        self.xCoordinate = 4
+        self.yCoordinate = 4
