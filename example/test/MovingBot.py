@@ -25,13 +25,13 @@ class MovingBot:
 
     def goForward(self):
         if(self.direction == 0):
-            self.y -= 51
+            self.y -= 50
         if(self.direction == 1):
-            self.x += 51
+            self.x += 50
         if(self.direction == 2):
-            self.y += 51
+            self.y += 50
         if(self.direction == 3):
-            self.x -= 51
+            self.x -= 50
 
     def turnLeft(self):
         self.direction -= 1

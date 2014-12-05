@@ -6,6 +6,7 @@ import math
 import os
 from GameTile import GameTile
 from MovingBot import MovingBot
+from EquationManager import EquationManager
 
 tileImages = []
 tiles = []
@@ -27,6 +28,9 @@ class GameScreen:
         self.secondaryCommands = []
 
         self.bot = MovingBot(self.botImage, 91, 100)
+        
+        self.equationManager = EquationManager()
+        self.equationManager.change_equation()
 
         # Load tile images
         for i in range(0, 5):
@@ -204,7 +208,9 @@ class GameScreen:
             DrawHelper.drawAspect(screen,self.mainImage, 0.75,0.2)
             DrawHelper.drawAspect(screen,self.funcImage, 0.75,0.5)
             #DrawHelper.drawAspect(screen,self.botImage, 0.365,0.835)
+            
             self.bot.draw(screen)
+            self.equationManager.draw(screen)
 
              # Text blocks
             title1 = self.titleFont.render("Robobuddy", 1, (10,10,10))
@@ -223,12 +229,6 @@ class GameScreen:
             funcPos.centery = 325
             screen.blit(labelMain, mainPos)
             screen.blit(labelFunc, funcPos)
-
-            labelEq = self.labelFont.render("<insert equation here>", 1, (10,10,10))
-            eqPos = labelEq.get_rect()
-            eqPos.centerx = 200
-            eqPos.centery = 50
-            screen.blit(labelEq, eqPos)
 
             # Buttons
             DrawHelper.drawCoor(screen,self.goButton,682, 420)
