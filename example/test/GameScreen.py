@@ -15,6 +15,7 @@ tiles = []
 class GameScreen:
     # Load all of the textures, fonts, titles, etc.
     def __init__(self):
+        #images
         self.bgImage = TextureLoader.load(os.path.join('assets', 'game-bg.png'), (800,600))
         self.spriteSheet = TextureLoader.load(os.path.join('assets', 'BotSprites.png'), (98,98))
         self.botNorth = TextureLoader.loadSprite(12,0,37,49,TextureLoader.get(self.spriteSheet),(37,49))
@@ -24,42 +25,50 @@ class GameScreen:
         self.mainImage = TextureLoader.load(os.path.join('assets', 'main.png'), (151,151))
         self.funcImage = TextureLoader.load(os.path.join('assets', 'func.png'), (151,101))
         self.goButton = TextureLoader.load(os.path.join('assets', 'button-go.png'), (69,27))
+        self.stopButton = TextureLoader.load(os.path.join('assets', 'button-stop.png'), (69,27))
         self.clearButton = TextureLoader.load(os.path.join('assets', 'button-clear.png'), (69,27))
 
+        # Load tile images
+        for i in range(0, 5):
+            tileImages.append(TextureLoader.load(os.path.join('assets', 'tile' + str(i+1) + '.png'), (47,47) ))
+
+        #commands and initial values 
         self.botRunning = False
         self.currentCommand = 0
         self.currentSecondaryCommand = 0
         self.commands = []
         self.secondaryCommands = []
+        self.gameState = 0 # 0 - tile placement, 1 - bot running, 2 - bot is resetting
+        self.selectedTile = None
 
+        # Fonts
+        self.titleFont =  pygame.font.SysFont('ActionIsShaded', 48)
+        self.labelFont = pygame.font.SysFont('ActionIsShaded', 24)
+
+        #equation stuff (jen's turf)
         self.equationManager = EquationManager()
         self.equationManager.change_equation()
         
+        #class instances
         self.bot = MovingBot(self.botNorth, self.botEast, self.botSouth, self.botWest, 291, 300)
 
-        # Load tile images
-        for i in range(0, 5):
-            tileImages.append(TextureLoader.load(os.path.join('assets', 'tile' + str(i+1) + '.png'), (47,47) ))
         # constant for keeping track of tile width and spawner placement
         self.TILEWIDTH = 47;
-
-        # The selected tile is the one being dragged
-        self.selectedTile = None
 
         # The two grids - represented by 2d arrays 
         self.mainMethod = [[0 for x in range(3)] for x in range(3)] 
         self.secondaryMethod = [[0 for x in range(2)] for x in range(3)]
-
-        # Two sizes of the same font to use
-        self.titleFont =  pygame.font.SysFont('ActionIsShaded', 48)
-        self.labelFont = pygame.font.SysFont('ActionIsShaded', 24)
 
     # Update the game logic
     def update(self):
         if self.selectedTile:
             self.selectedTile.move(self.mouseX,self.mouseY,self.TILEWIDTH)
 
-        MovementHelper.executeCommands(self)
+        if(self.gameState == 1):
+            MovementHelper.executeCommands(self)
+        if(self.gameState == 2):
+            self.botRunning = True
+            self.gameState = 1
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):
@@ -92,6 +101,7 @@ class GameScreen:
                 self.botRunning = False
                 self.currentCommand = 0
                 self.currentSecondaryCommand = 0
+                self.gameState = 0
 
                 # Clear tiles and grids
                 global tiles
@@ -107,28 +117,43 @@ class GameScreen:
             # Is the user clicking on the Go button?
             tempX = 682
             if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
-
+                # Start the run process and "zeroes" the robot and command heirarchy
                 if not self.botRunning:
-                    # Start the run process and "zero" the reobot
+                    # The "go" button is being pressed after a series of commands and the robot must be reset THEN go
+                    if not self.bot.zeroed:
+                        self.currentCommand = 0
+                        self.currentSecondaryCommand = 0
+                        self.bot.reset()
+                        self.gameState = 2
+                    else:
+                        self.currentCommand = 0
+                        self.currentSecondaryCommand = 0
+                        self.bot.reset()
+                        self.botRunning = True
+                        self.gameState = 1
+
+                        # Build list of secondary commands
+                        self.secondaryCommands = []
+                        for i in range(0,2):
+                            for j in range(0,3):
+                                # Grab the commands that exist from the grid
+                                if self.secondaryMethod[j][i] != 0:
+                                    self.secondaryCommands.append(self.secondaryMethod[j][i])
+
+                        # Build list of commands
+                        self.commands = []
+                        for k in range(0,3):
+                            for l in range(0,3):
+                                # Grab the commands that exist from the grid
+                                if self.mainMethod[l][k] != 0:
+                                    self.commands.append(self.mainMethod[l][k])
+                else: # The stop button was pressed while the robot was in motion
+                    self.currentCommand = 0
+                    self.currentSecondaryCommand = 0
                     self.bot.reset()
-                    self.botRunning = True
-
-                    # Build list of secondary commands
-                    self.secondaryCommands = []
-                    for i in range(0,2):
-                        for j in range(0,3):
-                            # Grab the commands that exist from the grid
-                            if self.secondaryMethod[j][i] != 0:
-                                self.secondaryCommands.append(self.secondaryMethod[j][i])
-
-                    # Build list of commands
-                    self.commands = []
-                    for k in range(0,3):
-                        for l in range(0,3):
-                            # Grab the commands that exist from the grid
-                            if self.mainMethod[l][k] != 0:
-                                self.commands.append(self.mainMethod[l][k])
-
+                    self.gameState = 0
+                    self.botRunning = False
+                    
                 return
 
     # The mouse button was released and a tile is selected. kill whatever isn't in an appropriate location
@@ -204,7 +229,10 @@ class GameScreen:
             screen.blit(labelFunc, funcPos)
 
             # Buttons
-            DrawHelper.drawCoor(screen,self.goButton,682, 420)
+            if(self.gameState == 1):
+                DrawHelper.drawCoor(screen,self.stopButton,682,420)
+            else:
+                DrawHelper.drawCoor(screen,self.goButton,682, 420)
             DrawHelper.drawCoor(screen,self.clearButton,599, 420)
 
             # Draw the tile spawners (just images) with a 3 pixel gap

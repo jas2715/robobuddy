@@ -1,3 +1,5 @@
+import pygame
+
 def executeCommands(self):
     if self.botRunning:
         #if Robobuddy has not reached the end of his commands
@@ -6,6 +8,7 @@ def executeCommands(self):
             cmd = self.commands[self.currentCommand]
             # if that command is to grab a number then grab the number Robobuddy is standing on
             if(cmd == "grab"):
+                pygame.time.delay(400)
                 print("Grab")
                 # increment current command since it's done now
                 self.currentCommand += 1
@@ -19,6 +22,7 @@ def executeCommands(self):
                         self.currentSecondaryCommand = 0
                     #if the command is to grab a number then grab the number Robobuddy is standing on
                     if(cmd2 == "grab"):
+                        pygame.time.delay(400)
                         print("Grab")
                         # Same as before but now increment currentSECONDARYcommand since were in the function
                         self.currentSecondaryCommand += 1
@@ -26,6 +30,7 @@ def executeCommands(self):
                     elif(cmd2 == "turnleft" or cmd2 == "turnright" or cmd2 == "forward"):
                         #ensure the bot isn't going off the grid - only execute if the robot is safe to move
                         if(cmd2 == "forward"):
+                            pygame.time.delay(400)
                             if(self.bot.direction == 0 and self.bot.yCoordinate != 0):
                                 self.bot.executeCommand(cmd2)
                             elif(self.bot.direction == 1 and self.bot.xCoordinate != 8):
@@ -37,6 +42,7 @@ def executeCommands(self):
                             #Increment commands regardless of if robot moved so that it isn't stuck against a wall
                             self.currentSecondaryCommand += 1
                         else:
+                            pygame.time.delay(400)
                             self.bot.executeCommand(cmd2)
                             # Same as before but now increment currentSECONDARYcommand since were in the function
                             self.currentSecondaryCommand += 1
@@ -48,6 +54,7 @@ def executeCommands(self):
             elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
                 #ensure the bot isn't going off the grid - only execute if the robot is safe to move
                 if(cmd == "forward"):
+                    pygame.time.delay(400)
                     if(self.bot.direction == 0 and self.bot.yCoordinate != 0):
                         self.bot.executeCommand(cmd)
                     elif(self.bot.direction == 1 and self.bot.xCoordinate != 8):
@@ -59,9 +66,11 @@ def executeCommands(self):
                     #Increment commands regardless of if robot moved so that it isn't stuck against a wall
                     self.currentCommand += 1
                 else:
+                    pygame.time.delay(400)
                     self.bot.executeCommand(cmd)
                     self.currentCommand += 1
         # if robobuddy has reached the end of his commands then stop running and reset current command
         else:
             self.currentCommand = 0
             self.botRunning = False
+            self.gameState = 0

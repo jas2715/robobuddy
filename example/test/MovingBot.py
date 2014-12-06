@@ -15,6 +15,8 @@ class MovingBot:
         self.direction = 0
         self.xCoordinate = 4
         self.yCoordinate = 4
+        # if the robot has moved at all from its original position it is no longer zeroed
+        self.zeroed = True
 
     # executes the passed in commands one by one
     def executeCommand(self,command):
@@ -26,6 +28,7 @@ class MovingBot:
         # calls the correct function
         options[command]()
         self.updateDirection()
+        self.zeroed = False
 
     def draw(self, screen):
         if(self.direction == 0):
@@ -58,7 +61,7 @@ class MovingBot:
             self.yCoordinate += 1
         if(self.direction == 3):
             self.x -= 50
-            self.yCoordinate -= 1
+            self.xCoordinate -= 1
 
     def turnLeft(self):
         self.direction -= 1
@@ -77,3 +80,4 @@ class MovingBot:
         self.xCoordinate = 4
         self.yCoordinate = 4
         self.updateDirection()
+        self.zeroed = True
