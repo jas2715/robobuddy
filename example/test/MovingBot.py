@@ -28,8 +28,14 @@ class MovingBot:
         self.updateDirection()
 
     def draw(self, screen):
-        DrawHelper.drawCoor(screen,self.image,self.x,self.y)
-
+        if(self.direction == 0):
+            DrawHelper.drawCoor(screen,self.image,self.x,self.y) 
+        elif(self.direction == 1):
+            DrawHelper.drawCoor(screen,self.image,self.x-5,self.y+7)  
+        elif(self.direction == 2):
+            DrawHelper.drawCoor(screen,self.image,self.x,self.y+2)
+        elif(self.direction == 3):
+            DrawHelper.drawCoor(screen,self.image,self.x-7,self.y+7)
     def updateDirection(self):
         if(self.direction == 0):
             self.image = self.north
