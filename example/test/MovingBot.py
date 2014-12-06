@@ -3,8 +3,12 @@ import TextureLoader
 import DrawHelper
 
 class MovingBot:
-    def __init__(self, image, x, y):
-        self.image = image
+    def __init__(self, north, east, south, west, x, y):
+        self.north = north
+        self.image = north
+        self.east = east
+        self.south = south
+        self.west = west
         self.x = x
         self.y = y
         # 0 - north, 1 - east, 2 - south, 3 - west
@@ -21,9 +25,20 @@ class MovingBot:
         }
         # calls the correct function
         options[command]()
+        self.updateDirection()
 
     def draw(self, screen):
         DrawHelper.drawCoor(screen,self.image,self.x,self.y)
+
+    def updateDirection(self):
+        if(self.direction == 0):
+            self.image = self.north
+        elif(self.direction == 1):
+            self.image = self.east
+        elif(self.direction == 2):
+            self.image = self.south
+        elif(self.direction == 3):
+            self.image = self.west       
 
     def goForward(self):
         if(self.direction == 0):
@@ -55,3 +70,4 @@ class MovingBot:
         self.y = 300
         self.xCoordinate = 4
         self.yCoordinate = 4
+        self.updateDirection()

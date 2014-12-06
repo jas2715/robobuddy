@@ -16,7 +16,11 @@ class GameScreen:
     # Load all of the textures, fonts, titles, etc.
     def __init__(self):
         self.bgImage = TextureLoader.load(os.path.join('assets', 'game-bg.png'), (800,600))
-        self.botImage = TextureLoader.load(os.path.join('assets', 'bot.png'), (37,49))
+        self.spriteSheet = TextureLoader.load(os.path.join('assets', 'BotSprites.png'), (98,98))
+        self.botNorth = TextureLoader.loadSprite(12,0,37,49,TextureLoader.get(self.spriteSheet),(37,49))
+        self.botEast = TextureLoader.loadSprite(49,12,49,37,TextureLoader.get(self.spriteSheet),(49,37))
+        self.botSouth = TextureLoader.loadSprite(49,49,37,49,TextureLoader.get(self.spriteSheet),(37,49))
+        self.botWest = TextureLoader.loadSprite(0,49,49,37,TextureLoader.get(self.spriteSheet),(49,37))
         self.mainImage = TextureLoader.load(os.path.join('assets', 'main.png'), (151,151))
         self.funcImage = TextureLoader.load(os.path.join('assets', 'func.png'), (151,101))
         self.goButton = TextureLoader.load(os.path.join('assets', 'button-go.png'), (69,27))
@@ -31,7 +35,7 @@ class GameScreen:
         self.equationManager = EquationManager()
         self.equationManager.change_equation()
         
-        self.bot = MovingBot(self.botImage, 291, 300)
+        self.bot = MovingBot(self.botNorth, self.botEast, self.botSouth, self.botWest, 291, 300)
 
         # Load tile images
         for i in range(0, 5):
