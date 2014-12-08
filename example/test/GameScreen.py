@@ -46,11 +46,11 @@ class GameScreen:
         self.labelFont = pygame.font.SysFont('ActionIsShaded', 24)
 
         #equation stuff (jen's turf)
-        self.equationManager = EquationManager()
+        self.equationManager = EquationManager(9,9)
         self.equationManager.change_equation()
         
         #class instances
-        self.bot = MovingBot(self.botNorth, self.botEast, self.botSouth, self.botWest, 291, 300)
+        self.bot = MovingBot(self.botNorth, self.botEast, self.botSouth, self.botWest, 291, 300, self.equationManager)
 
         # constant for keeping track of tile width and spawner placement
         self.TILEWIDTH = 47;
@@ -102,6 +102,7 @@ class GameScreen:
                 self.currentCommand = 0
                 self.currentSecondaryCommand = 0
                 self.gameState = 0
+                self.equationManager.display_default()
 
                 # Clear tiles and grids
                 global tiles
@@ -119,6 +120,7 @@ class GameScreen:
             if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
                 # Start the run process and "zeroes" the robot and command heirarchy
                 if not self.botRunning:
+                    self.equationManager.display_default()
                     # The "go" button is being pressed after a series of commands and the robot must be reset THEN go
                     if not self.bot.zeroed:
                         self.currentCommand = 0

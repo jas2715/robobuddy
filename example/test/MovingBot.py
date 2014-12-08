@@ -3,7 +3,7 @@ import TextureLoader
 import DrawHelper
 
 class MovingBot:
-    def __init__(self, north, east, south, west, x, y):
+    def __init__(self, north, east, south, west, x, y, eqManager):
         self.north = north
         self.image = north
         self.east = east
@@ -17,6 +17,9 @@ class MovingBot:
         self.yCoordinate = 4
         # if the robot has moved at all from its original position it is no longer zeroed
         self.zeroed = True
+        # Sorry this has to be here, but there's no way of tracking
+        # the bot's movement step-by-step from the GameScreen class
+        self.em = eqManager        
 
     # executes the passed in commands one by one
     def executeCommand(self,command):
@@ -62,6 +65,9 @@ class MovingBot:
         if(self.direction == 3):
             self.x -= 50
             self.xCoordinate -= 1
+
+        # Did the bot find anything on the board?
+        self.em.checkBoardContents(self.xCoordinate, self.yCoordinate)
 
     def turnLeft(self):
         self.direction -= 1
