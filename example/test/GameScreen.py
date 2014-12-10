@@ -38,7 +38,7 @@ class GameScreen:
         self.currentSecondaryCommand = 0
         self.commands = []
         self.secondaryCommands = []
-        self.gameState = 0 # 0 - tile placement, 1 - bot running, 2 - bot is resetting
+        self.gameState = 0 # 0 - tile placement, 1 - bot running, 2 - bot is resetting, 3 - pause for equation end
         self.selectedTile = None
 
         # Fonts
@@ -66,9 +66,14 @@ class GameScreen:
 
         if(self.gameState == 1):
             MovementHelper.executeCommands(self)
-        if(self.gameState == 2):
+            if self.equationManager.completeEquation():
+                self.gameState = 3
+        elif(self.gameState == 2):
             self.botRunning = True
             self.gameState = 1
+        elif(self.gameState == 3):
+            self.clearAll()
+            self.equationManager.doEquationCorrect()
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):
@@ -97,22 +102,7 @@ class GameScreen:
             tempY = 420
             if(self.mouseX > tempX) and (self.mouseX < tempX + 69) and (self.mouseY > tempY) and (self.mouseY < tempY + 69):
                 # stop and reset the robot and command heirarchy
-                self.bot.reset()
-                self.botRunning = False
-                self.currentCommand = 0
-                self.currentSecondaryCommand = 0
-                self.gameState = 0
-                self.equationManager.display_default()
-
-                # Clear tiles and grids
-                global tiles
-                tiles = []
-                for i in range(0, 3):
-                    for j in range(0, 3):
-                        self.removeFromGrid(i,j,"main")
-                for i in range(0, 3):
-                    for j in range(0, 2):
-                        self.removeFromGrid(i,j,"secondary")
+                self.clearAll()
                 return
 
             # Is the user clicking on the Go button?
@@ -174,6 +164,26 @@ class GameScreen:
             #removes the tile from existance if it wasn't dropped on a grid
             tiles.remove(self.selectedTile)
             self.logInfoForTesting()
+
+
+    # If the user hits the clear button, or if the equation is complete
+    def clearAll(self):
+        # stop and reset the robot and command heirarchy
+        self.bot.reset()
+        self.botRunning = False
+        self.currentCommand = 0
+        self.curentSecondaryCommand = 0
+        self.gameState = 0
+        self.equationManager.display_default()
+        # Clear tiles and grids
+        global tiles
+        tiles = []
+        for i in range(0, 3):
+            for j in range(0, 3):
+                self.removeFromGrid(i,j,"main")
+        for i in range(0, 3):
+            for j in range(0, 2):
+                self.removeFromGrid(i,j,"secondary")
 
     # Removes a tiles influence on its respective grid
     def removeFromGrid(self,xCord,yCord,grid):

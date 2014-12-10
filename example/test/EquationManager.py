@@ -75,10 +75,33 @@ class EquationManager:
                 self.op2 = str(cell.value)
                 self.refresh_equation()
 
+    def completeEquation(self):
+        # If both operands have been set
+        if self.op1 != "__" and self.op2 != "__":
+            # Evaluate the value of the equation
+            if self.equations[self.eqIndex].operator == "+":
+                value = int(self.op1) + int(self.op2)
+            elif self.equations[self.eqIndex].operator == "-":
+                value = int(self.op1) - int(self.op2)
+            elif self.equations[self.eqIndex].operator == "x":
+                value = int(self.op1) * int(self.op2)
+            elif self.equations[self.eqIndex].operator == "/":
+                value = int(self.op1) / int(self.op2)
+            # Does the equation evaluate correctly?
+            return value == self.equations[self.eqIndex].answer
+        return False
+
+    def doEquationCorrect(self):
+        pygame.time.delay(1200)
+        self.change_equation()
+        self.display_default()
+
     # Change equation
     def change_equation(self):
-        # Randomize an equation to pick from 
-        self.eqIndex = random.randrange(0, len(self.equations))
+        # Randomize an equation to pick from
+        oldIndex = self.eqIndex # don't choose the same equation again
+        while self.eqIndex == oldIndex:
+            self.eqIndex = random.randrange(0, len(self.equations))
         self.refresh_equation()
 
         # Set the board contents
@@ -128,4 +151,12 @@ class EquationManager:
             Operand(1, 5,4, self.boardToScreenX(5), self.boardToScreenY(4)),
             Operand(8, 3,6, self.boardToScreenX(3), self.boardToScreenY(6)),
             Operand(3, 1,2, self.boardToScreenX(1), self.boardToScreenY(2))
+            ]))
+
+
+        # 3: __-__= 4 (6,2,4)
+        self.equations.append(Equation(4, "-", [
+            Operand(6, 5,4, self.boardToScreenX(5), self.boardToScreenY(4)),
+            Operand(2, 3,6, self.boardToScreenX(3), self.boardToScreenY(6)),
+            Operand(4, 1,2, self.boardToScreenX(1), self.boardToScreenY(2))
             ]))
