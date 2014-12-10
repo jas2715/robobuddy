@@ -27,6 +27,7 @@ class MovingBot:
             'forward' : self.goForward,
             'turnleft' : self.turnLeft,
             'turnright' : self.turnRight,
+            'grab' : self.grab,
         }
         # calls the correct function
         options[command]()
@@ -66,6 +67,7 @@ class MovingBot:
             self.x -= 50
             self.xCoordinate -= 1
 
+    def grab(self):
         # Did the bot find anything on the board?
         self.em.checkBoardContents(self.xCoordinate, self.yCoordinate)
 

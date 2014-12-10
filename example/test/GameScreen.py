@@ -124,21 +124,7 @@ class GameScreen:
                         self.botRunning = True
                         self.gameState = 1
 
-                        # Build list of secondary commands
-                        self.secondaryCommands = []
-                        for i in range(0,2):
-                            for j in range(0,3):
-                                # Grab the commands that exist from the grid
-                                if self.secondaryMethod[j][i] != 0:
-                                    self.secondaryCommands.append(self.secondaryMethod[j][i])
-
-                        # Build list of commands
-                        self.commands = []
-                        for k in range(0,3):
-                            for l in range(0,3):
-                                # Grab the commands that exist from the grid
-                                if self.mainMethod[l][k] != 0:
-                                    self.commands.append(self.mainMethod[l][k])
+                    self.buildCommands();
                 else: # The stop button was pressed while the robot was in motion
                     self.currentCommand = 0
                     self.currentSecondaryCommand = 0
@@ -147,6 +133,23 @@ class GameScreen:
                     self.botRunning = False
                     
                 return
+
+    def buildCommands(self):
+        # Build list of secondary commands
+        self.secondaryCommands = []
+        for i in range(0,2):
+            for j in range(0,3):
+                # Grab the commands that exist from the grid
+                if self.secondaryMethod[j][i] != 0:
+                    self.secondaryCommands.append(self.secondaryMethod[j][i])
+
+        # Build list of commands
+        self.commands = []
+        for k in range(0,3):
+            for l in range(0,3):
+                # Grab the commands that exist from the grid
+                if self.mainMethod[l][k] != 0:
+                    self.commands.append(self.mainMethod[l][k])
 
     # The mouse button was released and a tile is selected. kill whatever isn't in an appropriate location
     def releaseMouse(self):

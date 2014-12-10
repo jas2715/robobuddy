@@ -6,28 +6,16 @@ def executeCommands(self):
         if len(self.commands) > self.currentCommand:
             # get the current command 
             cmd = self.commands[self.currentCommand]
-            # if that command is to grab a number then grab the number Robobuddy is standing on
-            if(cmd == "grab"):
-                pygame.time.delay(400)
-                print("Grab")
-                # increment current command since it's done now
-                self.currentCommand += 1
             # if the current command is actually to run the function then we go into a second loop
-            elif(cmd == "function"):
+            if(cmd == "function"):
                 if (len(self.secondaryCommands) > self.currentSecondaryCommand):
                     #runs step by step through the functions commands (exactly like in the above main method loop)
                     cmd2 = self.secondaryCommands[self.currentSecondaryCommand]
                     #Recursion by returning to beginning of this loop
                     if(cmd2 == "function"):
                         self.currentSecondaryCommand = 0
-                    #if the command is to grab a number then grab the number Robobuddy is standing on
-                    if(cmd2 == "grab"):
-                        pygame.time.delay(400)
-                        print("Grab")
-                        # Same as before but now increment currentSECONDARYcommand since were in the function
-                        self.currentSecondaryCommand += 1
-                    #if the command is to turn or move then do so
-                    elif(cmd2 == "turnleft" or cmd2 == "turnright" or cmd2 == "forward"):
+                    #if the command is to turn or move or grab then do so
+                    elif(cmd2 == "turnleft" or cmd2 == "turnright" or cmd2 == "forward" or cmd2 == "grab"):
                         #ensure the bot isn't going off the grid - only execute if the robot is safe to move
                         if(cmd2 == "forward"):
                             pygame.time.delay(400)
@@ -51,7 +39,7 @@ def executeCommands(self):
                     self.currentCommand += 1
                     self.currentSecondaryCommand = 0
             #if the command is to turn or move then do so        
-            elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward"):
+            elif(cmd == "turnleft" or cmd == "turnright" or cmd == "forward" or cmd == "grab"):
                 #ensure the bot isn't going off the grid - only execute if the robot is safe to move
                 if(cmd == "forward"):
                     pygame.time.delay(400)
