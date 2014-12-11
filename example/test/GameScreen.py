@@ -66,14 +66,20 @@ class GameScreen:
 
         if(self.gameState == 1):
             MovementHelper.executeCommands(self)
-            if self.equationManager.completeEquation():
+            complete = self.equationManager.completeEquation()
+            if complete == True:
                 self.gameState = 3
+            elif complete == False:
+                self.gameState = 4
         elif(self.gameState == 2):
             self.botRunning = True
             self.gameState = 1
         elif(self.gameState == 3):
             self.clearAll()
             self.equationManager.doEquationCorrect()
+        elif(self.gameState == 4):
+            self.clearAll()
+            self.equationManager.doEquationIncorrect()
 
     # Spawns a new tile, moves a current one, clears the methods, or compiels the methods
     def pressMouse(self):

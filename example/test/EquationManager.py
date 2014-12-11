@@ -89,11 +89,15 @@ class EquationManager:
                 value = int(self.op1) / int(self.op2)
             # Does the equation evaluate correctly?
             return value == self.equations[self.eqIndex].answer
-        return False
-
+        return -1
+    
     def doEquationCorrect(self):
         pygame.time.delay(1200)
         self.change_equation()
+        self.display_default()
+
+    def doEquationIncorrect(self):
+        pygame.time.delay(800)
         self.display_default()
 
     # Change equation
@@ -154,9 +158,9 @@ class EquationManager:
             ]))
 
 
-        # 3: __-__= 4 (6,2,4)
+        # 3: __-__= 4 (2,4,6)
         self.equations.append(Equation(4, "-", [
-            Operand(6, 5,4, self.boardToScreenX(5), self.boardToScreenY(4)),
-            Operand(2, 3,6, self.boardToScreenX(3), self.boardToScreenY(6)),
-            Operand(4, 1,2, self.boardToScreenX(1), self.boardToScreenY(2))
+            Operand(2, 7,4, self.boardToScreenX(7), self.boardToScreenY(4)),
+            Operand(4, 5,2, self.boardToScreenX(5), self.boardToScreenY(2)),
+            Operand(6, 3,4, self.boardToScreenX(3), self.boardToScreenY(4))
             ]))
